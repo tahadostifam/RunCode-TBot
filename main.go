@@ -2,6 +2,7 @@ package main
 
 import (
 	"CODE-Runner/code_runner_bot"
+	"CODE-Runner/configs"
 	"fmt"
 	"os"
 	"strings"
@@ -13,7 +14,8 @@ var token string = strings.TrimSpace(os.Getenv("CODE_RUNNER_BOT_TOKEN"))
 
 func main() {
 	if len(token) > 0 {
-		fmt.Println()
+		configs.ReadAndSetConfigs()
+		code_runner_bot.SetSSHClient()
 
 		bot_client, bot_err := tgbotapi.NewBotAPI(token)
 		if bot_err != nil {

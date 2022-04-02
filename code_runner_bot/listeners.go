@@ -2,6 +2,8 @@ package code_runner_bot
 
 import (
 	"fmt"
+	"math/rand"
+	"os"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -29,7 +31,36 @@ func HandleRunCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI) {
 		return
 	}
 
-	SendTextMessage(update, bot, fmt.Sprintf("lang : %s\ncode : %s\n", lang, strings.TrimSpace(code_string)))
+	success_exec, code_err, code_result := ExecCode(lang, code_string)
+	if !success_exec {
+		SendTextMessage(update, bot, "خطا هنگام اجرای کد :\n"+code_err)
+	} else {
+		SendTextMessage(update, bot, fmt.Sprintf("Result: \n%s", code_result))
+	}
+}
+
+func ExecCode(lang string, code string) (bool, string, string) {
+	rand_name := rand.Intn(20)
+	file_full_path := fmt.Sprintf("/tmp/%v.code_runner_bot.txt", rand_name)
+	write_file_err := os.WriteFile(file_full_path, []byte(code), 0644)
+	if write_file_err != nil {
+		return false, "Server Error: Error in writing file on /tmp", ""
+	} else {
+		var fn_result string
+		var format_of_lang_cli string
+		switch lang {
+		case "rb":
+			format_of_lang_cli = fmt.Sprintf("ruby %s", file_full_path)
+		}
+
+		output, exec_err := sshClient.Cmd(format_of_lang_cli).Output()
+		if exec_err != nil {
+			return false, "Error in executing the file: " + exec_err.Error(), ""
+		} else {
+			fn_result = string(output)
+			return true, "", fn_result
+		}
+	}
 }
 
 func IsValidLanguage(name string) bool {
