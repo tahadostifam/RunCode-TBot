@@ -1,0 +1,7 @@
+ChallengeResponseAuthentication no
+# ListenAddress 0.0.0.0
+Port 25
+UsePAM yes
+X11Forwarding no
+PrintMotd no
+AcceptEnv LANG LC_*
