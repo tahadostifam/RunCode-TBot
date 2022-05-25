@@ -20,7 +20,7 @@ func main() {
 
 	botClient, botErr := tgbotapi.NewBotAPI(token)
 	if botErr != nil {
-		fmt.Printf("Error: %v\n", bot_err)
+		fmt.Printf("Error: %v\n", botErr)
 		os.Exit(1)
 	}
 
