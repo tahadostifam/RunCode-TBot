@@ -24,41 +24,45 @@ func HandleRunCommand(update *tgbotapi.Update, bot *tgbotapi.BotAPI) {
 	msgWordsArr := strings.Fields(msg)
 
 	lang := msgWordsArr[1]
-	code_string := msg[7:]
+	codeString := msg[7:]
 
 	if !IsValidLanguage(lang) {
 		SendTextMessage(update, bot, "درحال حاضر از زبان وارد شده پشتیبانی نمیکنیم!")
 		return
 	}
 
-	success_exec, code_err, code_result := ExecCode(lang, code_string)
-	if !success_exec {
-		SendTextMessage(update, bot, "خطا هنگام اجرای کد :\n"+code_err)
+	successExec, codeErr, codeResult := ExecCode(lang, codeString)
+	if !successExec {
+		SendTextMessage(update, bot, "خطا هنگام اجرای کد :\n"+codeErr)
 	} else {
-		SendTextMessage(update, bot, fmt.Sprintf("Result: \n%s", code_result))
+		SendTextMessage(update, bot, fmt.Sprintf("Result: \n%s", codeResult))
 	}
 }
 
 func ExecCode(lang string, code string) (bool, string, string) {
-	rand_name := rand.Intn(20)
-	file_full_path := fmt.Sprintf("/tmp/%v.code_runner_bot.txt", rand_name)
-	write_file_err := os.WriteFile(file_full_path, []byte(code), 0644)
-	if write_file_err != nil {
+	randName := rand.Intn(20)
+	fileFullPath := fmt.Sprintf("/tmp/%v.code_runner_bot.txt", randName)
+	writeFileErr := os.WriteFile(fileFullPath, []byte(code), 0644)
+	if writeFileErr != nil {
+		os.Remove(fileFullPath)
 		return false, "Server Error: Error in writing file on /tmp", ""
 	} else {
-		var fn_result string
-		var format_of_lang_cli string
+		var formattedLangCli string
 		switch lang {
 		case "rb":
-			format_of_lang_cli = fmt.Sprintf("ruby %s", file_full_path)
+			formattedLangCli = fmt.Sprintf("ruby %s", fileFullPath)
+		case "py":
+			formattedLangCli = fmt.Sprintf("python %s", fileFullPath)
 		}
 
-		output, exec_err := sshClient.Cmd(format_of_lang_cli).Output()
+		output, exec_err := sshClient.Cmd(formattedLangCli).Output()
+
+		os.Remove(fileFullPath)
+
 		if exec_err != nil {
 			return false, "Error in executing the file: " + exec_err.Error(), ""
 		} else {
-			fn_result = string(output)
-			return true, "", fn_result
+			return true, "", string(output)
 		}
 	}
 }

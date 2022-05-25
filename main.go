@@ -18,14 +18,14 @@ func main() {
 
 	token = configs.AllConfigs.BOT_TOKEN
 
-	bot_client, bot_err := tgbotapi.NewBotAPI(token)
-	if bot_err != nil {
+	botClient, botErr := tgbotapi.NewBotAPI(token)
+	if botErr != nil {
 		fmt.Printf("Error: %v\n", bot_err)
 		os.Exit(1)
 	}
 
 	fmt.Println("Welcome to CODE-Runner Bot")
 
-	code_runner_bot.RunBot(bot_client)
+	code_runner_bot.RunBot(botClient)
 
 }

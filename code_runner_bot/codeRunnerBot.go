@@ -1,6 +1,7 @@
 package code_runner_bot
 
 import (
+	"CODE-Runner/configs"
 	"fmt"
 	"os"
 	"strings"
@@ -25,40 +26,41 @@ func HandleUpdates(bot *tgbotapi.BotAPI) {
 		}
 
 		// Definfing Commands
-		var recvd_msg string = strings.TrimSpace(update.Message.Text)
-		is_bad_command := true
-		switch recvd_msg {
+		var recvdMsg string = strings.TrimSpace(update.Message.Text)
+		isBadCommand := true
+		switch recvdMsg {
 		case "/start":
-			is_bad_command = false
+			isBadCommand = false
 			HandleStartCommand(&update, bot)
 		case "/help":
-			is_bad_command = false
+			isBadCommand = false
 			HandleHelpCommand(&update, bot, help_text)
 		}
-		if recvd_msg == "/run" {
-			is_bad_command = false
+		if recvdMsg == "/run" {
+			isBadCommand = false
 
-			var run_help string
-			run_help += "برای اجرای کد تان این کامند را اجرا کنید :\n"
-			run_help += "/run <js,py,rb> Your-Code"
-			run_help += "\n\n"
-			run_help += "توجه کنید دسترسی به اینترنت مجاز نمی باشد و ران کردن هرگونه برنامه سنگین جهت *آیش سرور ما با بن شدن شما طرف خواهد شد پس سعی کنید از while و یا for بی نهایت استفاده نکنید."
+			var runHelp string
+			runHelp += "برای اجرای کد تان این کامند را اجرا کنید :\n"
+			runHelp += "/run <js,py,rb> Your-Code"
+			runHelp += "\n\n"
+			runHelp += "توجه کنید دسترسی به اینترنت مجاز نمی باشد و ران کردن هرگونه برنامه سنگین جهت *آیش سرور ما با بن شدن شما طرف خواهد شد پس سعی کنید از while و یا for بی نهایت استفاده نکنید."
 
-			SendTextMessage(&update, bot, run_help)
-		} else if strings.Contains(recvd_msg, "/run") {
-			is_bad_command = false
+			SendTextMessage(&update, bot, runHelp)
+		} else if strings.Contains(recvdMsg, "/run") {
+			isBadCommand = false
 
 			HandleRunCommand(&update, bot)
 		}
-		if is_bad_command {
+		if isBadCommand {
 			HandleUndefinedCommand(&update, bot)
 		}
 		// Definfing Commands End
 
-		// FIXME - just devel
-		fmt.Printf("Message ID: %d\n", update.Message.Chat.ID)
-		fmt.Printf("Message TEXT: %s\n", update.Message.Text)
-		fmt.Println("--------------------")
+		if configs.AllConfigs.ENV == "devel" {
+			fmt.Printf("Message ID: %d\n", update.Message.Chat.ID)
+			fmt.Printf("Message TEXT: %s\n", update.Message.Text)
+			fmt.Println("--------------------")
+		}
 	}
 }
 
