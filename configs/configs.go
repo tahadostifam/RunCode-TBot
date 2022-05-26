@@ -15,7 +15,6 @@ type Configs struct {
 	SSH_PORT  string `yaml:"SSH_PORT"`
 	SSH_USER  string `yaml:"SSH_USER"`
 	SSH_PASS  string `yaml:"SSH_PASS"`
-	ENV       string `yaml:"ENV"`
 }
 
 func ReadAndSetConfigs() *Configs {

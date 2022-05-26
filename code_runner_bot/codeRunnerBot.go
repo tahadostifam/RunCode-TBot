@@ -5,8 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/tahadostifam/RunCode-TBot/configs"
-
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -28,12 +26,6 @@ func HandleUpdates(bot *tgbotapi.BotAPI) {
 
 		// Defining Commands
 		var recvdMsg string = strings.TrimSpace(update.Message.Text)
-
-		if configs.AllConfigs.ENV == "devel" {
-			fmt.Printf("Sender:%s\nMessage:\n%s", update.Message.Chat.UserName, recvdMsg)
-			fmt.Println("-----------------------------")
-		}
-
 		isBadCommand := true
 		switch recvdMsg {
 		case "/start":
@@ -63,11 +55,9 @@ func HandleUpdates(bot *tgbotapi.BotAPI) {
 		}
 		// Definfing Commands End
 
-		if configs.AllConfigs.ENV == "devel" {
-			fmt.Printf("Message ID: %d\n", update.Message.Chat.ID)
-			fmt.Printf("Message TEXT: %s\n", update.Message.Text)
-			fmt.Println("--------------------")
-		}
+		fmt.Printf("Message ID: %d\n", update.Message.Chat.ID)
+		fmt.Printf("Sender:%s\nMessage:\n%s\n", update.Message.Chat.UserName, update.Message.Text)
+		fmt.Println("-----------------------------\n\n")
 	}
 }
 
