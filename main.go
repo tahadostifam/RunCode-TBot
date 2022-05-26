@@ -1,10 +1,11 @@
 package main
 
 import (
-	"CODE-Runner/code_runner_bot"
-	"CODE-Runner/configs"
 	"fmt"
 	"os"
+
+	"github.com/tahadostifam/RunCode-TBot/code_runner_bot"
+	"github.com/tahadostifam/RunCode-TBot/configs"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )

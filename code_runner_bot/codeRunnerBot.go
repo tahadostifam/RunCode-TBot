@@ -1,10 +1,11 @@
 package code_runner_bot
 
 import (
-	"CODE-Runner/configs"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/tahadostifam/RunCode-TBot/configs"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
@@ -25,8 +26,14 @@ func HandleUpdates(bot *tgbotapi.BotAPI) {
 			continue
 		}
 
-		// Definfing Commands
+		// Defining Commands
 		var recvdMsg string = strings.TrimSpace(update.Message.Text)
+
+		if configs.AllConfigs.ENV == "devel" {
+			fmt.Printf("Sender:%s\nMessage:\n%s", update.Message.Chat.UserName, recvdMsg)
+			fmt.Println("-----------------------------")
+		}
+
 		isBadCommand := true
 		switch recvdMsg {
 		case "/start":

@@ -1,4 +1,4 @@
-module CODE-Runner
+module github.com/tahadostifam/RunCode-TBot
 
 go 1.17
 

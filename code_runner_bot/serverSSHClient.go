@@ -1,9 +1,10 @@
 package code_runner_bot
 
 import (
-	"CODE-Runner/configs"
 	"fmt"
 	"os"
+
+	"github.com/tahadostifam/RunCode-TBot/configs"
 
 	"github.com/helloyi/go-sshclient"
 )
